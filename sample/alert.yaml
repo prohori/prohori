@@ -1,0 +1,11 @@
+apiVersion: monitoring.prohori/v1alpha1
+kind: Alert
+metadata:
+  name: alert-example
+  namespace: demo
+spec:
+  type: PodAlert
+  command: pod_status
+  selector:
+    matchLabels:
+      app: nginx
