@@ -2,3 +2,4 @@
 bin/
 apiserver.local.config/
 default.etcd/
+kubeconfig
