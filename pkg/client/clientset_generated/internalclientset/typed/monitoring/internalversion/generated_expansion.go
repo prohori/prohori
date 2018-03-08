@@ -15,4 +15,4 @@ limitations under the License.
 */
 package internalversion
 
-type AlertExpansion interface{}
+type CheckExpansion interface{}

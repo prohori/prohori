@@ -26,45 +26,45 @@ import (
 	"k8s.io/apiserver/pkg/endpoints/request"
 )
 
-// Validate checks that an instance of Alert is well formed
-func (AlertStrategy) Validate(ctx request.Context, obj runtime.Object) field.ErrorList {
-	alert := obj.(*monitoring.Alert)
-	log.Printf("Validating fields for Alert %s\n", alert.Name)
+// Validate checks that an instance of Check is well formed
+func (CheckStrategy) Validate(ctx request.Context, obj runtime.Object) field.ErrorList {
+	check := obj.(*monitoring.Check)
+	log.Printf("Validating fields for Check %s\n", check.Name)
 	errors := field.ErrorList{}
 
-	alertSpec := alert.Spec
+	checkSpec := check.Spec
 
 	// Validate spec.type
-	alertType := alertSpec.Type
-	if !(alertType == monitoring.TypePodAlert || alertType == monitoring.TypeNodeAlert || alertType == monitoring.TypeClusterAlert) {
+	checkType := checkSpec.Type
+	if !(checkType == monitoring.CheckTypePod || checkType == monitoring.CheckTypeNode || checkType == monitoring.CheckTypeCluster) {
 		errors = append(errors, field.NotSupported(
 			field.NewPath("spec", "type"),
-			alertType,
-			[]string{"PodAlert", "NodeAlert", "ClusterAlert"},
+			checkType,
+			[]string{"PodCheck", "NodeCheck", "ClusterCheck"},
 		))
 	}
 
 	// Validate selector
-	selector := alertSpec.Selector
+	selector := checkSpec.Selector
 	if selector != nil {
-		switch alertType {
-		case monitoring.TypeClusterAlert:
+		switch checkType {
+		case monitoring.CheckTypeCluster:
 			errors = append(errors, field.Forbidden(
 				field.NewPath("spec", "selector"),
-				"You can't use selector for ClusterAlert type",
+				"You can't use selector for ClusterCheck type",
 			))
-		case monitoring.TypeNodeAlert:
+		case monitoring.CheckTypeNode:
 			if selector.Namespace != "" {
 				errors = append(errors, field.Forbidden(
 					field.NewPath("spec", "selector"),
-					"You can't use namespace for NodeAlert type",
+					"You can't use namespace for NodeCheck type",
 				))
 			}
 		}
 	}
 
 	// Validate plugin
-	plugin := alertSpec.Plugin
+	plugin := checkSpec.Plugin
 	if plugin != nil {
 		pp := plugin.PluginPullPolicy
 		if pp != "" {
@@ -86,7 +86,7 @@ func (AlertStrategy) Validate(ctx request.Context, obj runtime.Object) field.Err
 	}
 
 	// Validate CheckInterval
-	ci := alertSpec.CheckInterval
+	ci := checkSpec.CheckInterval
 	if ci != 0 && ci < 30 {
 		errors = append(errors, field.Invalid(
 			field.NewPath("spec", "checkInterval"),
@@ -96,7 +96,7 @@ func (AlertStrategy) Validate(ctx request.Context, obj runtime.Object) field.Err
 	}
 
 	// Validate AlertInterval
-	ai := alertSpec.AlertInterval
+	ai := checkSpec.AlertInterval
 	if ai != 0 && ai < 60 {
 		errors = append(errors, field.Invalid(
 			field.NewPath("spec", "checkInterval"),
@@ -105,8 +105,8 @@ func (AlertStrategy) Validate(ctx request.Context, obj runtime.Object) field.Err
 		))
 	}
 
-	// Validate ProblemState
-	receivers := alertSpec.Receivers
+	// Validate CheckState
+	receivers := checkSpec.Receivers
 	for i, r := range receivers {
 		if !(r.State == monitoring.StateOK || r.State == monitoring.StateWarning || r.State == monitoring.StateCritical) {
 			errors = append(errors, field.NotSupported(

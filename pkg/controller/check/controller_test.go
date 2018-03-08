@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 
-package alert_test
+package check_test
 
 import (
 	"time"
@@ -29,17 +29,17 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-var _ = Describe("Alert controller", func() {
-	var instance Alert
+var _ = Describe("Check controller", func() {
+	var instance Check
 	var expectedKey string
-	var client AlertInterface
+	var client CheckInterface
 	var before chan struct{}
 	var after chan struct{}
 
 	BeforeEach(func() {
-		instance = Alert{}
+		instance = Check{}
 		instance.Name = "instance-1"
-		expectedKey = "alert-controller-test-handler/instance-1"
+		expectedKey = "check-controller-test-handler/instance-1"
 	})
 
 	AfterEach(func() {
@@ -48,7 +48,7 @@ var _ = Describe("Alert controller", func() {
 
 	Describe("when creating a new object", func() {
 		It("invoke the reconcile method", func() {
-			client = cs.MonitoringV1alpha1().Alerts("alert-controller-test-handler")
+			client = cs.MonitoringV1alpha1().Checks("check-controller-test-handler")
 			before = make(chan struct{})
 			after = make(chan struct{})
 

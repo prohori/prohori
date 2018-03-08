@@ -28,13 +28,13 @@ import (
 	. "github.com/prohori/prohori/pkg/client/clientset_generated/clientset/typed/monitoring/v1alpha1"
 )
 
-var _ = Describe("Alert", func() {
-	var instance Alert
-	var expected Alert
-	var client AlertInterface
+var _ = Describe("Check", func() {
+	var instance Check
+	var expected Check
+	var client CheckInterface
 
 	BeforeEach(func() {
-		instance = Alert{}
+		instance = Check{}
 		instance.Name = "instance-1"
 
 		expected = instance
@@ -47,7 +47,7 @@ var _ = Describe("Alert", func() {
 	Describe("when sending a storage request", func() {
 		Context("for a valid config", func() {
 			It("should provide CRUD access to the object", func() {
-				client = cs.MonitoringV1alpha1().Alerts("alert-test-valid")
+				client = cs.MonitoringV1alpha1().Checks("check-test-valid")
 
 				By("returning success from the create request")
 				actual, err := client.Create(&instance)

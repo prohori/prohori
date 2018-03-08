@@ -30,10 +30,10 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Alert": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Check": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "Alert",
+					Description: "Check",
 					Properties: map[string]spec.Schema{
 						"kind": {
 							SchemaProps: spec.SchemaProps{
@@ -57,14 +57,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						},
 						"spec": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Specification of the desired behavior of the alert.",
-								Ref:         ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertSpec"),
+								Description: "Specification of the desired behavior of the check.",
+								Ref:         ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckSpec"),
 							},
 						},
 						"status": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Most recently observed status of the alert. This data may not be up to date. Populated by the system. Read-only.",
-								Ref:         ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertStatus"),
+								Description: "Most recently observed status of the check. This data may not be up to date. Populated by the system. Read-only.",
+								Ref:         ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckStatus"),
 							},
 						},
 					},
@@ -72,9 +72,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertSpec", "github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+				"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckSpec", "github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertList": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckList": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
@@ -103,7 +103,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 								Items: &spec.SchemaOrArray{
 									Schema: &spec.Schema{
 										SchemaProps: spec.SchemaProps{
-											Ref: ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Alert"),
+											Ref: ref("github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Check"),
 										},
 									},
 								},
@@ -114,12 +114,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 				},
 			},
 			Dependencies: []string{
-				"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Alert", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+				"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.Check", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertSchemeFns": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckSchemeFns": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "Alert Functions and Structs",
+					Description: "Check Functions and Structs",
 					Properties: map[string]spec.Schema{
 						"DefaultSchemeFns": {
 							SchemaProps: spec.SchemaProps{
@@ -133,21 +133,21 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Dependencies: []string{
 				"github.com/kubernetes-incubator/apiserver-builder/pkg/builders.DefaultSchemeFns"},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertSpec": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckSpec": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "AlertSpec defines the desired state of Alert",
+					Description: "CheckSpec defines the desired state of Check",
 					Properties: map[string]spec.Schema{
 						"type": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Alert type. One of PodAlert, NodeAlert, ClusterAlert Each alert must have a valid type. Cannot be updated.",
+								Description: "Check type. One of PodCheck, NodeCheck, ClusterCheck Each check must have a valid type. Cannot be updated.",
 								Type:        []string{"string"},
 								Format:      "",
 							},
 						},
 						"command": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Check command. Can either be supported built-in methods or external plugin Each alert must have a command. Cannot be updated.",
+								Description: "Check command. Can either be supported built-in methods or external plugin Each check must have a command. Cannot be updated.",
 								Type:        []string{"string"},
 								Format:      "",
 							},
@@ -219,14 +219,14 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Dependencies: []string{
 				"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CommandPlugin", "github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.NotificationReceiver", "github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.ObjectSelector"},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertStatus": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckStatus": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
-					Description: "AlertStatus defines the observed state of Alert",
+					Description: "CheckStatus defines the observed state of Check",
 					Properties: map[string]spec.Schema{
 						"phase": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Current condition of the alert.",
+								Description: "Current condition of the check.",
 								Type:        []string{"string"},
 								Format:      "",
 							},
@@ -236,7 +236,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			},
 			Dependencies: []string{},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertStatusStrategy": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckStatusStrategy": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
@@ -252,7 +252,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 			Dependencies: []string{
 				"github.com/kubernetes-incubator/apiserver-builder/pkg/builders.DefaultStatusStorageStrategy"},
 		},
-		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.AlertStrategy": {
+		"github.com/prohori/prohori/pkg/apis/monitoring/v1alpha1.CheckStrategy": {
 			Schema: spec.Schema{
 				SchemaProps: spec.SchemaProps{
 					Properties: map[string]spec.Schema{
@@ -342,7 +342,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 						},
 						"namespace": {
 							SchemaProps: spec.SchemaProps{
-								Description: "Kubernetes objects namespace Default to alert object namespaces Can be updated",
+								Description: "Kubernetes objects namespace Default to check object namespaces Can be updated",
 								Type:        []string{"string"},
 								Format:      "",
 							},

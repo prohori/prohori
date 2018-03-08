@@ -25,8 +25,8 @@ type FakeMonitoring struct {
 	*testing.Fake
 }
 
-func (c *FakeMonitoring) Alerts(namespace string) internalversion.AlertInterface {
-	return &FakeAlerts{c, namespace}
+func (c *FakeMonitoring) Checks(namespace string) internalversion.CheckInterface {
+	return &FakeChecks{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

@@ -18,10 +18,10 @@ limitations under the License.
 
 package v1alpha1
 
-// AlertListerExpansion allows custom methods to be added to
-// AlertLister.
-type AlertListerExpansion interface{}
+// CheckListerExpansion allows custom methods to be added to
+// CheckLister.
+type CheckListerExpansion interface{}
 
-// AlertNamespaceListerExpansion allows custom methods to be added to
-// AlertNamespaceLister.
-type AlertNamespaceListerExpansion interface{}
+// CheckNamespaceListerExpansion allows custom methods to be added to
+// CheckNamespaceLister.
+type CheckNamespaceListerExpansion interface{}

@@ -30,59 +30,59 @@ import (
 	time "time"
 )
 
-// AlertInformer provides access to a shared informer and lister for
-// Alerts.
-type AlertInformer interface {
+// CheckInformer provides access to a shared informer and lister for
+// Checks.
+type CheckInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.AlertLister
+	Lister() v1alpha1.CheckLister
 }
 
-type alertInformer struct {
+type checkInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewAlertInformer constructs a new informer for Alert type.
+// NewCheckInformer constructs a new informer for Check type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewAlertInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredAlertInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewCheckInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredCheckInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredAlertInformer constructs a new informer for Alert type.
+// NewFilteredCheckInformer constructs a new informer for Check type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredAlertInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredCheckInformer(client clientset.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MonitoringV1alpha1().Alerts(namespace).List(options)
+				return client.MonitoringV1alpha1().Checks(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.MonitoringV1alpha1().Alerts(namespace).Watch(options)
+				return client.MonitoringV1alpha1().Checks(namespace).Watch(options)
 			},
 		},
-		&monitoring_v1alpha1.Alert{},
+		&monitoring_v1alpha1.Check{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *alertInformer) defaultInformer(client clientset.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredAlertInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *checkInformer) defaultInformer(client clientset.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredCheckInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *alertInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&monitoring_v1alpha1.Alert{}, f.defaultInformer)
+func (f *checkInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&monitoring_v1alpha1.Check{}, f.defaultInformer)
 }
 
-func (f *alertInformer) Lister() v1alpha1.AlertLister {
-	return v1alpha1.NewAlertLister(f.Informer().GetIndexer())
+func (f *checkInformer) Lister() v1alpha1.CheckLister {
+	return v1alpha1.NewCheckLister(f.Informer().GetIndexer())
 }

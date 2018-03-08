@@ -20,7 +20,7 @@ package controller
 
 import (
 	"github.com/kubernetes-incubator/apiserver-builder/pkg/controller"
-	"github.com/prohori/prohori/pkg/controller/alert"
+	"github.com/prohori/prohori/pkg/controller/check"
 	"github.com/prohori/prohori/pkg/controller/sharedinformers"
 	"k8s.io/client-go/rest"
 )
@@ -29,6 +29,6 @@ func GetAllControllers(config *rest.Config) ([]controller.Controller, chan struc
 	shutdown := make(chan struct{})
 	si := sharedinformers.NewSharedInformers(config, shutdown)
 	return []controller.Controller{
-		alert.NewAlertController(config, si),
+		check.NewCheckController(config, si),
 	}, shutdown
 }

@@ -24,8 +24,8 @@ import (
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
-	// Alerts returns a AlertInformer.
-	Alerts() AlertInformer
+	// Checks returns a CheckInformer.
+	Checks() CheckInformer
 }
 
 type version struct {
@@ -39,7 +39,7 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
-// Alerts returns a AlertInformer.
-func (v *version) Alerts() AlertInformer {
-	return &alertInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+// Checks returns a CheckInformer.
+func (v *version) Checks() CheckInformer {
+	return &checkInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

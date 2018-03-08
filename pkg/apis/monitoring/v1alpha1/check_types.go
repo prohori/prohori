@@ -23,37 +23,37 @@ import (
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// Alert
+// Check
 // +k8s:openapi-gen=true
-// +resource:path=alerts,strategy=AlertStrategy
-type Alert struct {
+// +resource:path=checks,strategy=CheckStrategy
+type Check struct {
 	metav1.TypeMeta `json:",inline"`
 
 	// Standard object's metadata.
 	metav1.ObjectMeta `json:"metadata"`
 
-	// Specification of the desired behavior of the alert.
-	Spec AlertSpec `json:"spec"`
+	// Specification of the desired behavior of the check.
+	Spec CheckSpec `json:"spec"`
 
-	// Most recently observed status of the alert.
+	// Most recently observed status of the check.
 	// This data may not be up to date.
 	// Populated by the system.
 	// Read-only.
 	// +optional
-	Status AlertStatus `json:"status,omitempty"`
+	Status CheckStatus `json:"status,omitempty"`
 }
 
-// AlertSpec defines the desired state of Alert
-type AlertSpec struct {
-	// Alert type.
-	// One of PodAlert, NodeAlert, ClusterAlert
-	// Each alert must have a valid type.
+// CheckSpec defines the desired state of Check
+type CheckSpec struct {
+	// Check type.
+	// One of PodCheck, NodeCheck, ClusterCheck
+	// Each check must have a valid type.
 	// Cannot be updated.
-	Type AlertType `json:"type"`
+	Type CheckType `json:"type"`
 
 	// Check command.
 	// Can either be supported built-in methods or external plugin
-	// Each alert must have a command.
+	// Each check must have a command.
 	// Cannot be updated.
 	Command string `json:"command"`
 
@@ -102,35 +102,35 @@ type AlertSpec struct {
 	Receivers []NotificationReceiver `json:"receivers,omitempty"`
 }
 
-// AlertPhase is a label for the condition of a alert at the current time.
-type AlertPhase string
+// CheckPhase is a label for the condition of a check at the current time.
+type CheckPhase string
 
-// These are the valid statuses of alerts.
+// These are the valid statuses of checks.
 const (
-	// AlertPending means the alert has been accepted by the system, but has not been started.
+	// CheckPending means the check has been accepted by the system, but has not been started.
 	// pulling plugins onto the host if necessary.
-	AlertPending AlertPhase = "Pending"
-	// AlertRunning means the alert has been set.
-	AlertRunning AlertPhase = "Running"
-	// AlertFailed means that alert has terminated in a failure.
-	AlertFailed AlertPhase = "Failed"
-	// AlertUnknown means that for some reason the state of the alert could not be obtained.
-	AlertUnknown AlertPhase = "Unknown"
+	CheckPending CheckPhase = "Pending"
+	// CheckRunning means the check has been set.
+	CheckRunning CheckPhase = "Running"
+	// CheckFailed means that check has terminated in a failure.
+	CheckFailed CheckPhase = "Failed"
+	// CheckUnknown means that for some reason the state of the check could not be obtained.
+	CheckUnknown CheckPhase = "Unknown"
 )
 
-// AlertStatus defines the observed state of Alert
-type AlertStatus struct {
-	// Current condition of the alert.
+// CheckStatus defines the observed state of Check
+type CheckStatus struct {
+	// Current condition of the check.
 	// +optional
-	Phase AlertPhase `json:"phase,omitempty"`
+	Phase CheckPhase `json:"phase,omitempty"`
 }
 
-type AlertType string
+type CheckType string
 
 const (
-	TypePodAlert     AlertType = "PodAlert"
-	TypeNodeAlert    AlertType = "NodeAlert"
-	TypeClusterAlert AlertType = "ClusterAlert"
+	CheckTypePod     CheckType = "PodCheck"
+	CheckTypeNode    CheckType = "NodeCheck"
+	CheckTypeCluster CheckType = "ClusterCheck"
 )
 
 type ObjectSelector struct {
@@ -140,7 +140,7 @@ type ObjectSelector struct {
 	Name string `json:"name,omitempty"`
 
 	// Kubernetes objects namespace
-	// Default to alert object namespaces
+	// Default to check object namespaces
 	// Can be updated
 	// +optional
 	Namespace string `json:"namespace,omitempty"`
@@ -172,17 +172,17 @@ type CommandPlugin struct {
 	Binary string `json:"Binary"`
 }
 
-type ProblemState string
+type CheckState string
 
 const (
-	StateOK       ProblemState = "OK"
-	StateWarning  ProblemState = "WARNING"
-	StateCritical ProblemState = "CRITICAL"
+	StateOK       CheckState = "OK"
+	StateWarning  CheckState = "WARNING"
+	StateCritical CheckState = "CRITICAL"
 )
 
 type NotificationReceiver struct {
 	// For which state notification will be sent
-	State ProblemState `json:"state,omitempty"`
+	State CheckState `json:"state,omitempty"`
 
 	// To whom notification will be sent
 	To []string `json:"to,omitempty"`

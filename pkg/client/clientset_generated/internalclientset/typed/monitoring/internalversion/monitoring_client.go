@@ -22,7 +22,7 @@ import (
 
 type MonitoringInterface interface {
 	RESTClient() rest.Interface
-	AlertsGetter
+	ChecksGetter
 }
 
 // MonitoringClient is used to interact with features provided by the monitoring.prohori group.
@@ -30,8 +30,8 @@ type MonitoringClient struct {
 	restClient rest.Interface
 }
 
-func (c *MonitoringClient) Alerts(namespace string) AlertInterface {
-	return newAlerts(c, namespace)
+func (c *MonitoringClient) Checks(namespace string) CheckInterface {
+	return newChecks(c, namespace)
 }
 
 // NewForConfig creates a new MonitoringClient for the given config.

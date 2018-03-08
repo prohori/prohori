@@ -1,10 +1,10 @@
 apiVersion: monitoring.prohori/v1alpha1
-kind: Alert
+kind: Check
 metadata:
-  name: alert-example
+  name: check-example
   namespace: demo
 spec:
-  type: PodAlert
+  type: PodCheck
   command: pod_status
   selector:
     matchLabels:

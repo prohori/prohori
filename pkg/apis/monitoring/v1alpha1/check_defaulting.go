@@ -20,40 +20,40 @@ import (
 	"log"
 )
 
-// DefaultingFunction sets default Alert field values
-func (AlertSchemeFns) DefaultingFunction(o interface{}) {
-	alert := o.(*Alert)
+// DefaultingFunction sets default Check field values
+func (CheckSchemeFns) DefaultingFunction(obj interface{}) {
+	check := obj.(*Check)
 	// set default field values here
-	log.Printf("Defaulting fields for Alert %s\n", alert.Name)
+	log.Printf("Defaulting fields for Check %s\n", check.Name)
 
-	alertSpec := alert.Spec
+	checkSpec := check.Spec
 
 	// Defaulting selector
-	if alertSpec.Type == TypePodAlert {
-		selector := alertSpec.Selector
+	if checkSpec.Type == CheckTypePod {
+		selector := checkSpec.Selector
 		if selector == nil {
-			alert.Spec.Selector = new(ObjectSelector)
+			check.Spec.Selector = new(ObjectSelector)
 		}
-		if alert.Spec.Selector.Namespace == "" {
-			alert.Spec.Selector.Namespace = alert.Namespace
+		if check.Spec.Selector.Namespace == "" {
+			check.Spec.Selector.Namespace = check.Namespace
 		}
 	}
 
 	// Defaulting PluginPullPolicy
-	plugin := alertSpec.Plugin
+	plugin := checkSpec.Plugin
 	if plugin != nil {
 		if plugin.PluginPullPolicy == "" {
-			alert.Spec.Plugin.PluginPullPolicy = PullPluginAlways
+			check.Spec.Plugin.PluginPullPolicy = PullPluginAlways
 		}
 	}
 
 	// Defaulting CheckInterval
-	if alertSpec.CheckInterval == 0 {
-		alert.Spec.CheckInterval = 60
+	if checkSpec.CheckInterval == 0 {
+		check.Spec.CheckInterval = 60
 	}
 
 	// Defaulting AlertInterval
-	if alertSpec.AlertInterval == 0 {
-		alert.Spec.AlertInterval = 300
+	if checkSpec.AlertInterval == 0 {
+		check.Spec.AlertInterval = 300
 	}
 }

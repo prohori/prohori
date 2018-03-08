@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 
-package alert_test
+package check_test
 
 import (
 	"testing"
@@ -30,19 +30,19 @@ import (
 	"github.com/prohori/prohori/pkg/client/clientset_generated/clientset"
 	"github.com/prohori/prohori/pkg/openapi"
 	"github.com/prohori/prohori/pkg/controller/sharedinformers"
-	"github.com/prohori/prohori/pkg/controller/alert"
+	"github.com/prohori/prohori/pkg/controller/check"
 )
 
 var testenv *test.TestEnvironment
 var config *rest.Config
 var cs *clientset.Clientset
 var shutdown chan struct{}
-var controller *alert.AlertController
+var controller *check.CheckController
 var si *sharedinformers.SharedInformers
 
-func TestAlert(t *testing.T) {
+func TestCheck(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecsWithDefaultAndCustomReporters(t, "Alert Suite", []Reporter{test.NewlineReporter{}})
+	RunSpecsWithDefaultAndCustomReporters(t, "Check Suite", []Reporter{test.NewlineReporter{}})
 }
 
 var _ = BeforeSuite(func() {
@@ -52,7 +52,7 @@ var _ = BeforeSuite(func() {
 
 	shutdown = make(chan struct{})
 	si = sharedinformers.NewSharedInformers(config, shutdown)
-	controller = alert.NewAlertController(config, si)
+	controller = check.NewCheckController(config, si)
 	controller.Run(shutdown)
 })
 

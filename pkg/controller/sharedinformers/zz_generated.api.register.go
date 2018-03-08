@@ -51,7 +51,7 @@ func NewSharedInformers(config *rest.Config, shutdown <-chan struct{}) *SharedIn
 
 // startInformers starts all of the informers
 func (si *SharedInformers) startInformers(shutdown <-chan struct{}) {
-	go si.Factory.Monitoring().V1alpha1().Alerts().Informer().Run(shutdown)
+	go si.Factory.Monitoring().V1alpha1().Checks().Informer().Run(shutdown)
 }
 
 // ControllerInitArguments are arguments provided to the Init function for a new controller.

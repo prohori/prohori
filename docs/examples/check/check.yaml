@@ -1,7 +1,7 @@
-note: Alert Example
+note: Check Example
 sample: |
   apiVersion: monitoring.prohori/v1alpha1
-  kind: Alert
+  kind: Check
   metadata:
-    name: alert-example
+    name: check-example
   spec:

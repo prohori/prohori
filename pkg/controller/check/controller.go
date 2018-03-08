@@ -16,7 +16,7 @@ limitations under the License.
 */
 
 
-package alert
+package check
 
 import (
 	"log"
@@ -28,28 +28,28 @@ import (
 	listers "github.com/prohori/prohori/pkg/client/listers_generated/monitoring/v1alpha1"
 )
 
-// +controller:group=monitoring,version=v1alpha1,kind=Alert,resource=alerts
-type AlertControllerImpl struct {
+// +controller:group=monitoring,version=v1alpha1,kind=Check,resource=checks
+type CheckControllerImpl struct {
 	builders.DefaultControllerFns
 
-	// lister indexes properties about Alert
-	lister listers.AlertLister
+	// lister indexes properties about Check
+	lister listers.CheckLister
 }
 
 // Init initializes the controller and is called by the generated code
 // Register watches for additional resource types here.
-func (c *AlertControllerImpl) Init(arguments sharedinformers.ControllerInitArguments) {
-	// Use the lister for indexing alerts labels
-	c.lister = arguments.GetSharedInformers().Factory.Monitoring().V1alpha1().Alerts().Lister()
+func (c *CheckControllerImpl) Init(arguments sharedinformers.ControllerInitArguments) {
+	// Use the lister for indexing checks labels
+	c.lister = arguments.GetSharedInformers().Factory.Monitoring().V1alpha1().Checks().Lister()
 }
 
 // Reconcile handles enqueued messages
-func (c *AlertControllerImpl) Reconcile(u *v1alpha1.Alert) error {
+func (c *CheckControllerImpl) Reconcile(u *v1alpha1.Check) error {
 	// Implement controller logic here
-	log.Printf("Running reconcile Alert for %s\n", u.Name)
+	log.Printf("Running reconcile Check for %s\n", u.Name)
 	return nil
 }
 
-func (c *AlertControllerImpl) Get(namespace, name string) (*v1alpha1.Alert, error) {
-	return c.lister.Alerts(namespace).Get(name)
+func (c *CheckControllerImpl) Get(namespace, name string) (*v1alpha1.Check, error) {
+	return c.lister.Checks(namespace).Get(name)
 }

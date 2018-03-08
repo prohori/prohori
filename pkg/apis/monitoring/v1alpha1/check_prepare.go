@@ -22,16 +22,16 @@ import (
 	"k8s.io/apiserver/pkg/endpoints/request"
 )
 
-func (s AlertStrategy) PrepareForCreate(ctx request.Context, obj runtime.Object) {
+func (s CheckStrategy) PrepareForCreate(ctx request.Context, obj runtime.Object) {
 	// Invoke the parent implementation to strip the Status
 	s.DefaultStorageStrategy.PrepareForCreate(ctx, obj)
 
 	// Cast the element
-	alert := obj.(*monitoring.Alert)
+	check := obj.(*monitoring.Check)
 
 	// Custom PrepareForCreate logic here
-	alert.SetFinalizers([]string{"prohori/controller"})
-	alert.Status = monitoring.AlertStatus{
-		Phase: monitoring.AlertPending,
+	check.SetFinalizers([]string{"prohori/controller"})
+	check.Status = monitoring.CheckStatus{
+		Phase: monitoring.CheckPending,
 	}
 }
